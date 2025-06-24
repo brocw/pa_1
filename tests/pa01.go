@@ -42,7 +42,6 @@ func errorOut(s string) {
 }
 
 // 8-bit checksum calculation
-// Returns the checksum and number of characters
 func check8(file []byte) (uint8, int) {
 	var running_sum uint8
 	for _, value := range file {
@@ -53,7 +52,6 @@ func check8(file []byte) (uint8, int) {
 }
 
 // 16-bit checksum calculation
-// Returns the checksum and number of characters
 func check16(file []string) (uint16, int) {
 	var running_sum uint16
 	for _, value := range file {
@@ -90,7 +88,6 @@ func split_2(file []byte) ([]string, int) {
 }
 
 // 32-bit checksum calculation
-// Returns the checksum and number of characters
 func check32(file []string) (uint32, int) {
 	var running_sum uint32
 	for _, value := range file {
@@ -130,7 +127,6 @@ func split_4(file []byte) ([]string, int) {
 }
 
 // Prints the file from the byte array itself
-// Also prints out X's as they are not included in byte array
 func print_file(file []byte, num_x int) {
 	for count, value := range file {
 		if count % 80 == 0 {
@@ -149,10 +145,10 @@ func main() {
 	if len(os.Args) != 3 {
 		errorOut("Must have two arguments: File and Checksum size")
 	}
-
-	// Command-line parameters	
+	
 	fileName := os.Args[1]
 	checksumSizeStr := os.Args[2]
+
 	checksumSize, checksumErr := strconv.Atoi(checksumSizeStr) 
 	if checksumErr != nil {
 		errorOut("Error converting Checksum size to int")
@@ -163,18 +159,15 @@ func main() {
 	check(err)
 
 	switch checksumSize {
-	// 8-bit
 	case 8:
 		checksum, characterCount := check8(fileContents)
 		print_file(fileContents, 0)
 		fmt.Printf("%2d bit checksum is %8x for all %4d chars\n", checksumSize, checksum, characterCount)
-	// 16-bit
 	case 16:
 		file_arr, num_x := split_2(fileContents)
 		checksum, characterCount := check16(file_arr)
 		print_file(fileContents, num_x)
 		fmt.Printf("%2d bit checksum is %8x for all %4d chars\n", checksumSize, checksum, characterCount)
-	// 32-bit
 	case 32:
 		file_arr, num_x := split_4(fileContents)
 		checksum, characterCount := check32(file_arr)
